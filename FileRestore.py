@@ -16,10 +16,12 @@ FILE_SIGNATURES = {
     b'\x50\x4B\x03\x04': 'zip',
 }
 
-def restore_images(folder_path):
-    # Create a directory to store restored images
+
+def restore_files(folder_path):
+    # Create a directory to store restored files
     restored_dir = os.path.join(folder_path, "Restored_Files")
     os.makedirs(restored_dir, exist_ok=True)
+    
     
     try:
         # Iterate over files in the given folder
@@ -36,16 +38,18 @@ def restore_images(folder_path):
                             os.makedirs(image_folder, exist_ok=True)
                             new_filename = f"{filename}.{extension}"  # Adding the extension back to filename
                             shutil.copy(filepath, os.path.join(image_folder, new_filename))
+                            print(f"Restored: {filename} -> {new_filename} ({extension.upper()})")
                             break
                     else:
-                        print(f"Could not identify image type for file: {filename}")
+                        print(f"Could not identify type for file: {filename}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
 
 def main():
     # Check if folder path is provided as an argument
     if len(sys.argv) != 2:
-        print("Usage: ./my_script.py <folder_path>")
+        print("Error! Missing argument: ./FileRestore.py <folder_path>")
         sys.exit(1)
     
     folder_path = sys.argv[1]
@@ -54,8 +58,10 @@ def main():
     if not os.path.isdir(folder_path):
         print("Error: Provided path is not a directory.")
         sys.exit(1)
-    
-    restore_images(folder_path)
+        
+    print(f"Restoring files in folder: {folder_path}")
+    restore_files(folder_path)
+    print("Restoration complete.")
 
 if __name__ == "__main__":
     main()
